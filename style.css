@@ -148,6 +148,38 @@ body {
 
 @keyframes hint-in { to { opacity: 0.85; } }
 
+/* ── Nút chuyến tàu Thống Nhất ── */
+.train-btn {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: clamp(44px, 8vh, 72px);
+  z-index: 3;
+  padding: 10px 20px;
+  border: 1px solid rgba(127, 209, 174, 0.4);
+  border-radius: 999px;
+  background: rgba(10, 22, 34, 0.72);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: #efe6d0;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.train-btn:hover {
+  transform: translateX(-50%) translateY(-2px);
+  border-color: rgba(255, 205, 0, 0.7);
+  box-shadow: 0 8px 26px rgba(127, 209, 174, 0.15);
+}
+
+.train-btn:focus-visible { outline: 2px solid #ffcd00; outline-offset: 2px; }
+
+.train-btn.hidden { display: none; }
+
 /* ── Watermark holetex.com ── */
 .brand {
   position: fixed;
@@ -214,10 +246,11 @@ body {
   .card {
     left: 12px;
     right: 12px;
-    bottom: 12px;
+    bottom: 60px; /* chừa chỗ cho nút tàu phía dưới */
     width: auto;
     padding: 14px 16px 12px;
   }
+  .train-btn { bottom: 14px; font-size: 13px; padding: 9px 16px; }
   .card-name { font-size: 22px; }
   /* watermark dời lên trên để không đè thẻ thông tin */
   .brand {
