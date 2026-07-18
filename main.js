@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { OrbitControls } from './vendor/OrbitControls.js';
 import { PROVINCE_SHAPES } from './province-shapes.js';
+import { PROVINCE_DETAILS_EN } from './province-details-en.js';
 import { LANDMARKS, animateLandmark } from './landmarks.js';
 import {
   RAIL_WAYPOINTS, STATIONS, SEA_TRIPS,
@@ -11,6 +12,352 @@ const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const urlParams = new URLSearchParams(location.search);
 const demoMode = urlParams.has('demo');
 const trainMode = urlParams.has('train');
+
+// ── Language state (bilingual VI/EN) ─────────────────────────
+let currentLang = localStorage.getItem('invietnam-lang') || 'vi';
+
+const UI_STRINGS = {
+  vi: {
+    eyebrow: 'Bản đồ 34 tỉnh, thành Việt Nam · 2026',
+    sub: 'Chạm vào một dải non sông',
+    hint: 'Rê chuột qua từng tỉnh · kéo để xoay, lăn để thu phóng · nhấp để bay tới gần',
+    loader: 'Đang dựng non sông…',
+    train: 'Chuyến tàu Thống Nhất',
+    experiences: 'Trải nghiệm nên thử',
+    foods: 'Món ngon đặc sản',
+    mergedPrefix: 'Hợp nhất từ: ',
+    million: 'triệu dân',
+    typeProvince: 'Tỉnh',
+    typeCity: 'Thành phố trực thuộc TƯ',
+    islandType: 'Quần đảo · Biển Đông',
+    islandDesc: 'Phần lãnh thổ thiêng liêng của Tổ quốc giữa Biển Đông',
+    langFlag: '🇬🇧',
+    langLabel: 'EN',
+  },
+  en: {
+    eyebrow: '34 Provinces & Cities · Vietnam 2026',
+    sub: 'Touch a stretch of homeland',
+    hint: 'Hover provinces · drag to rotate, scroll to zoom · click to fly close',
+    loader: 'Rendering the homeland…',
+    train: 'Reunification Express Journey',
+    experiences: 'Must-try experiences',
+    foods: 'Local specialties',
+    mergedPrefix: 'Merged from: ',
+    million: 'million people',
+    typeProvince: 'Province',
+    typeCity: 'Municipality',
+    islandType: 'Archipelago · East Sea',
+    islandDesc: 'Sacred territory of the Fatherland in the East Sea',
+    langFlag: '🇻🇳',
+    langLabel: 'VI',
+  },
+};
+
+const PROVINCE_NAME_EN = {
+  'An Giang': 'An Giang',
+  'Bà Rịa - Vũng Tàu': 'Ba Ria - Vung Tau',
+  'Bắc Giang': 'Bac Giang',
+  'Bắc Kạn': 'Bac Kan',
+  'Bắc Ninh': 'Bac Ninh',
+  'Bạc Liêu': 'Bac Lieu',
+  'Bến Tre': 'Ben Tre',
+  'Bình Dương': 'Binh Duong',
+  'Bình Định': 'Binh Dinh',
+  'Bình Phước': 'Binh Phước',
+  'Bình Thuận': 'Binh Thuan',
+  'Cà Mau': 'Ca Mau',
+  'Cần Thơ': 'Can Tho',
+  'Cao Bằng': 'Cao Bang',
+  'Đà Nẵng': 'Da Nang',
+  'Đắk Lắk': 'Dak Lak',
+  'Đăk Lăk': 'Dak Lak',
+  'Đắk Nông': 'Dak Nong',
+  'Điện Biên': 'Dien Bien',
+  'Đồng Nai': 'Dong Nai',
+  'Đồng Tháp': 'Dong Thap',
+  'Gia Lai': 'Gia Lai',
+  'Hà Giang': 'Ha Giang',
+  'Hà Nam': 'Ha Nam',
+  'Hà Nội': 'Hanoi',
+  'Hà Tĩnh': 'Ha Tinh',
+  'Hải Dương': 'Hai Duong',
+  'Hải Phòng': 'Hai Phong',
+  'Hòa Bình': 'Hoa Binh',
+  'Hoà Bình': 'Hoa Binh',
+  'TP. Hồ Chí Minh': 'Ho Chi Minh City',
+  'TP HCM': 'Ho Chi Minh City',
+  'Hậu Giang': 'Hau Giang',
+  'Hưng Yên': 'Hung Yen',
+  'Khánh Hòa': 'Khanh Hoa',
+  'Kiên Giang': 'Kien Giang',
+  'Kon Tum': 'Kon Tum',
+  'Lai Châu': 'Lai Chau',
+  'Lâm Đồng': 'Lam Dong',
+  'Lạng Sơn': 'Lang Son',
+  'Lào Cai': 'Lao Cai',
+  'Long An': 'Long An',
+  'Nam Định': 'Nam Dinh',
+  'Nghệ An': 'Nghe An',
+  'Ninh Bình': 'Ninh Binh',
+  'Ninh Thuận': 'Ninh Thuan',
+  'Phú Thọ': 'Phu Tho',
+  'Phú Yên': 'Phu Yen',
+  'Quảng Bình': 'Quang Binh',
+  'Quảng Nam': 'Quang Nam',
+  'Quảng Ngãi': 'Quang Ngai',
+  'Quảng Ninh': 'Quang Ninh',
+  'Quảng Trị': 'Quang Tri',
+  'Sóc Trăng': 'Soc Trang',
+  'Sơn La': 'Son La',
+  'Tây Ninh': 'Tay Ninh',
+  'Thái Bình': 'Thai Binh',
+  'Thái Nguyên': 'Thai Nguyen',
+  'Thanh Hóa': 'Thanh Hoa',
+  'Huế': 'Hue',
+  'Tiền Giang': 'Tien Giang',
+  'Trà Vinh': 'Tra Vinh',
+  'Tuyên Quang': 'Tuyen Quang',
+  'Vĩnh Long': 'Vinh Long',
+  'Vĩnh Phúc': 'Vinh Phuc',
+  'Yên Bái': 'Yen Bai',
+};
+
+const LANDMARK_NAME_EN = {
+  'Khuê Văn Các': 'Khue Van Cac Pavilion',
+  'Thành phố Cảng': 'Port City',
+  'Ngọ Môn – Kỳ Đài': 'Ngo Mon Gate & Flag Tower',
+  'Cầu Vàng': 'Golden Bridge',
+  'Landmark 81': 'Landmark 81',
+  'Chợ nổi Cái Răng': 'Cai Rang Floating Market',
+  'Lán Nà Nưa': 'Na Nua Hut',
+  'Thác Bản Giốc': 'Ban Gioc Waterfall',
+  'Đèo Ô Quy Hồ': 'O Quy Ho Pass',
+  'Fansipan': 'Fansipan Peak',
+  'Đồi chè Tân Cương': 'Tan Cuong Tea Hills',
+  'Tượng đài Chiến thắng': 'Victory Monument',
+  'Núi Tô Thị': 'To Thi Mountain',
+  'Cao nguyên Mộc Châu': 'Moc Chau Plateau',
+  'Đền Hùng': 'Hung Kings Temple',
+  'Đình làng Quan họ': 'Quan Ho Communal House',
+  'Vịnh Hạ Long': 'Ha Long Bay',
+  'Văn miếu Xích Đằng': 'Xich Dang Temple of Literature',
+  'Tràng An': 'Trang An Landscape Complex',
+  'Thành nhà Hồ': 'Citadel of the Ho Dynasty',
+  'Làng Sen': 'Sen Village',
+  'Ngã ba Đồng Lộc': 'Dong Loc Junction',
+  'Cầu Hiền Lương': 'Hien Luong Bridge',
+  'Đảo Lý Sơn': 'Ly Son Island',
+  'Nhà rông Tây Nguyên': 'Central Highlands Rong House',
+  'Tháp Bà Ponagar': 'Po Nagar Cham Towers',
+  'Voi Bản Đôn': 'Ban Don Elephant Village',
+  'Nhà thờ Con Gà': 'Cathedral of Da Lat (Con Ga Church)',
+  'Rừng Nam Cát Tiên': 'Cat Tien National Park',
+  'Tòa thánh Cao Đài': 'Tay Ninh Holy See',
+  'Cầu Mỹ Thuận': 'My Thuan Bridge',
+  'Sen Tháp Mười': 'Thap Muoi Lotus Fields',
+  'Miếu Bà Chúa Xứ': 'Ba Chua Xu Temple',
+  'Đất Mũi': 'Dat Mui (Cape Ca Mau)',
+};
+
+function getLangStrings() { return UI_STRINGS[currentLang]; }
+
+function applyLanguageToUI() {
+  const s = getLangStrings();
+  const el = (id) => document.getElementById(id);
+  if (el('hdr-eyebrow'))   el('hdr-eyebrow').textContent   = s.eyebrow;
+  if (el('hdr-sub'))       el('hdr-sub').textContent       = s.sub;
+  if (el('hint'))          el('hint').textContent          = s.hint;
+  if (el('lbl-loader'))    el('lbl-loader').textContent    = s.loader;
+  if (el('lbl-train'))     el('lbl-train').textContent     = s.train;
+  if (el('lbl-experiences')) el('lbl-experiences').textContent = s.experiences;
+  if (el('lbl-foods'))     el('lbl-foods').textContent     = s.foods;
+  // Update lang button to show what clicking will switch TO
+  const btn = el('lang-toggle');
+  if (btn) {
+    btn.querySelector('.lang-flag').textContent  = s.langFlag;
+    btn.querySelector('.lang-label').textContent = s.langLabel;
+    btn.classList.toggle('active-en', currentLang === 'en');
+  }
+  if (typeof updateIslandLabels === 'function') {
+    updateIslandLabels();
+  }
+}
+
+// ── Province card image — canvas gradient fallback ──────────────────────
+// Each province gets a unique, beautiful gradient derived from its name.
+// Real jpg files in /images/ take priority; canvas is the fallback.
+
+// Province-specific gradient palettes (hue pairs)
+const PROVINCE_PALETTES = {
+  'Hà Nội':         [[220, 60], [180, 45]],
+  'Hải Phòng':      [[190, 65], [220, 50]],
+  'Huế':            [[270, 55], [200, 45]],
+  'Đà Nẵng':        [[200, 60], [160, 55]],
+  'TP. Hồ Chí Minh': [[30,  70], [55,  60]],
+  'Cần Thơ':        [[160, 65], [120, 55]],
+  'Tuyên Quang':    [[130, 60], [170, 55]],
+  'Cao Bằng':       [[210, 65], [175, 55]],
+  'Lai Châu':       [[145, 65], [185, 55]],
+  'Lào Cai':        [[140, 70], [100, 60]],
+  'Thái Nguyên':    [[120, 65], [155, 55]],
+  'Điện Biên':      [[40,  70], [20,  60]],
+  'Lạng Sơn':      [[195, 60], [230, 50]],
+  'Sơn La':         [[115, 65], [150, 55]],
+  'Phú Thọ':       [[25,  65], [50,  55]],
+  'Bắc Ninh':       [[280, 55], [240, 50]],
+  'Quảng Ninh':     [[200, 70], [230, 55]],
+  'Hưng Yên':      [[50,  65], [80,  55]],
+  'Ninh Bình':      [[165, 60], [200, 50]],
+  'Thanh Hóa':      [[35,  65], [60,  55]],
+  'Nghệ An':        [[220, 65], [190, 50]],
+  'Hà Tĩnh':        [[30,  60], [55,  50]],
+  'Quảng Trị':     [[200, 65], [230, 55]],
+  'Quảng Ngãi':     [[185, 60], [215, 50]],
+  'Gia Lai':         [[105, 65], [140, 55]],
+  'Khánh Hòa':      [[195, 70], [220, 60]],
+  'Đắk Lắk':        [[30,  65], [55,  55]],
+  'Lâm Đồng':      [[155, 65], [190, 55]],
+  'Đồng Nai':       [[125, 65], [165, 55]],
+  'Tây Ninh':       [[265, 60], [230, 50]],
+  'Vĩnh Long':      [[170, 65], [135, 55]],
+  'Đồng Tháp':     [[150, 70], [115, 60]],
+  'An Giang':        [[135, 65], [100, 55]],
+  'Cà Mau':         [[170, 70], [200, 60]],
+};
+
+function makeProvinceCanvas(name) {
+  const palette = PROVINCE_PALETTES[name];
+  const [h1, s1] = palette ? palette[0] : [195, 60];
+  const [h2, s2] = palette ? palette[1] : [160, 55];
+
+  const W = 400, H = 225; // 16:9
+  const c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  const g = c.getContext('2d');
+
+  // Background gradient
+  const bg = g.createLinearGradient(0, 0, W, H);
+  bg.addColorStop(0,   `hsl(${h1}, ${s1}%, 16%)`);
+  bg.addColorStop(0.5, `hsl(${(h1 + h2) / 2}, ${(s1 + s2) / 2}%, 12%)`);
+  bg.addColorStop(1,   `hsl(${h2}, ${s2}%, 14%)`);
+  g.fillStyle = bg;
+  g.fillRect(0, 0, W, H);
+
+  // Decorative radial glow
+  const glow = g.createRadialGradient(W * 0.65, H * 0.35, 10, W * 0.65, H * 0.35, H * 0.7);
+  glow.addColorStop(0, `hsla(${h1}, 80%, 55%, 0.22)`);
+  glow.addColorStop(1, 'transparent');
+  g.fillStyle = glow;
+  g.fillRect(0, 0, W, H);
+
+  // Second glow
+  const glow2 = g.createRadialGradient(W * 0.2, H * 0.75, 5, W * 0.2, H * 0.75, H * 0.5);
+  glow2.addColorStop(0, `hsla(${h2}, 80%, 50%, 0.18)`);
+  glow2.addColorStop(1, 'transparent');
+  g.fillStyle = glow2;
+  g.fillRect(0, 0, W, H);
+
+  // Scanline texture
+  for (let y = 0; y < H; y += 4) {
+    g.fillStyle = 'rgba(0,0,0,0.06)';
+    g.fillRect(0, y, W, 1);
+  }
+
+  // Bottom gradient overlay
+  const overlay = g.createLinearGradient(0, H * 0.55, 0, H);
+  overlay.addColorStop(0, 'transparent');
+  overlay.addColorStop(1, 'rgba(8,18,28,0.85)');
+  g.fillStyle = overlay;
+  g.fillRect(0, 0, W, H);
+
+  // Province name text
+  const fontSize = name.length > 12 ? 22 : 26;
+  g.font = `700 ${fontSize}px 'Be Vietnam Pro', sans-serif`;
+  g.textAlign = 'left';
+  g.textBaseline = 'bottom';
+  g.shadowColor = 'rgba(0,0,0,0.8)';
+  g.shadowBlur = 12;
+  g.fillStyle = '#ffcd00';
+  g.fillText(name, 18, H - 18);
+
+  // Decorative accent line
+  g.shadowBlur = 0;
+  g.beginPath();
+  g.moveTo(18, H - 14);
+  g.lineTo(Math.min(18 + name.length * (fontSize * 0.6), W - 18), H - 14);
+  g.strokeStyle = `hsla(${h1}, 80%, 60%, 0.5)`;
+  g.lineWidth = 2;
+  g.stroke();
+
+  return c.toDataURL('image/jpeg', 0.92);
+}
+
+// Cache generated canvases
+const _canvasCache = new Map();
+function getProvinceCanvasURL(name) {
+  if (!_canvasCache.has(name)) _canvasCache.set(name, makeProvinceCanvas(name));
+  return _canvasCache.get(name);
+}
+
+// Check if a fetched image is a valid image (not an HTML error page)
+function isValidImage(img) {
+  // naturalWidth === 0 means the image failed to render (e.g., HTML returned as jpg)
+  return img.naturalWidth > 0;
+}
+
+// Slug helper for image filenames: “TP. Hồ Chí Minh” → “tp-ho-chi-minh”
+function toSlug(str) {
+  return str
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/\p{Diacritic}/gu, '')
+    .replace(/\u0111/g, 'd')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+}
+
+const EXTENSIONS = ['webp', 'jpg', 'png', 'jpeg'];
+
+function loadProvinceImage(name) {
+  return new Promise((resolve) => {
+    const slug = toSlug(name);
+    let extIndex = 0;
+    
+    // Safety timeout: if checking all extensions takes >1.2 seconds, fallback to canvas
+    const timer = setTimeout(() => {
+      resolve(getProvinceCanvasURL(name));
+    }, 1200);
+
+    const tryNext = () => {
+      if (extIndex >= EXTENSIONS.length) {
+        clearTimeout(timer);
+        resolve(getProvinceCanvasURL(name));
+        return;
+      }
+
+      const ext = EXTENSIONS[extIndex++];
+      const img = new Image();
+
+      img.onload = () => {
+        if (isValidImage(img)) {
+          clearTimeout(timer);
+          resolve(img.src);
+        } else {
+          tryNext(); // HTML error page or corrupt image, try next
+        }
+      };
+
+      img.onerror = () => {
+        tryNext(); // 404 or load failure, try next
+      };
+
+      img.src = `images/${slug}.${ext}`;
+    };
+
+    tryNext();
+  });
+}
 
 // ── Chiếu tọa độ: kinh/vĩ độ → mặt phẳng (x đông, z nam) ─────
 const LON0 = 106.2, LAT0 = 16.2, SCALE = 9;
@@ -166,7 +513,7 @@ PROVINCE_SHAPES.forEach((p, idx) => {
 });
 
 // ── Nhãn hai quần đảo ────────────────────────────────────────
-function textSprite(text, size = 15) {
+function updateSpriteText(sp, text, size = 15) {
   const pad = 8, dpr = 2;
   const c = document.createElement('canvas');
   const g = c.getContext('2d');
@@ -181,19 +528,33 @@ function textSprite(text, size = 15) {
   g.shadowBlur = 8;
   g.fillStyle = '#c8d8e2';
   g.fillText(text, w / 2, hgt / 2);
+  
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
-  const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, opacity: 0.85, depthWrite: false }));
+  
+  if (sp.material.map) {
+    sp.material.map.dispose();
+  }
+  sp.material.map = tex;
+  sp.material.needsUpdate = true;
   sp.scale.set(w / (dpr * 6.5), hgt / (dpr * 6.5), 1);
-  return sp;
 }
 
-const hs = textSprite('Quần đảo Hoàng Sa');
+const hs = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: true, opacity: 0.85, depthWrite: false }));
 hs.position.set(px(112), 8.5, pz(16.4));
 scene.add(hs);
-const ts = textSprite('Quần đảo Trường Sa');
+
+const ts = new THREE.Sprite(new THREE.SpriteMaterial({ transparent: true, opacity: 0.85, depthWrite: false }));
 ts.position.set(px(115.3), 8.5, pz(9.6));
 scene.add(ts);
+
+function updateIslandLabels() {
+  const isEn = currentLang === 'en';
+  const hsText = isEn ? 'Hoang Sa' : 'Quần đảo Hoàng Sa';
+  const tsText = isEn ? 'Truong Sa' : 'Quần đảo Trường Sa';
+  updateSpriteText(hs, hsText);
+  updateSpriteText(ts, tsText);
+}
 
 // ── Hạt sáng lơ lửng ─────────────────────────────────────────
 let dust = null;
@@ -214,25 +575,154 @@ if (!reducedMotion) {
   scene.add(dust);
 }
 
-// ── Thẻ thông tin ────────────────────────────────────────────
+// ── Thẻ thông tin — bilingual, images, fade animation ────────
 const card = document.getElementById('card');
+const cardContent = document.querySelector('.card-content');
 const cardType = document.getElementById('card-type');
 const cardName = document.getElementById('card-name');
+const cardLandmarkSec = document.getElementById('card-landmark-sec');
 const cardLandmark = document.getElementById('card-landmark');
 const cardDesc = document.getElementById('card-desc');
+const cardExperiences = document.getElementById('card-experiences');
+const cardFoods = document.getElementById('card-foods');
 const cardMerged = document.getElementById('card-merged');
 const cardStats = document.getElementById('card-stats');
+const cardImgContainer = document.getElementById('card-img-container');
+const cardImage = document.getElementById('card-image');
+const cardImgShimmer = document.getElementById('card-img-shimmer');
+
+let _currentCardProvince = null; // track which province is shown to avoid redundant reloads
+
+function fadeCardContent(callback) {
+  if (!cardContent) { callback(); return; }
+  cardContent.classList.add('switching');
+  cardContent.classList.remove('switching-in');
+  setTimeout(() => {
+    callback();
+    cardContent.classList.remove('switching');
+    // Trigger reflow then add switching-in
+    void cardContent.offsetHeight;
+    cardContent.classList.add('switching-in');
+    setTimeout(() => cardContent.classList.remove('switching-in'), 220);
+  }, 180);
+}
+
+function showCardImage(name) {
+  // Reset state
+  cardImage.classList.remove('loaded');
+  cardImgShimmer && cardImgShimmer.classList.remove('hidden');
+  cardImgContainer && cardImgContainer.classList.add('visible');
+
+  loadProvinceImage(name).then((src) => {
+    cardImage.alt = name;
+    if (src.startsWith('data:')) {
+      // Canvas data URL — loads synchronously, no need to wait for onload
+      cardImage.src = src;
+      cardImage.classList.add('loaded');
+      cardImgShimmer && cardImgShimmer.classList.add('hidden');
+    } else {
+      // Real file URL — wait for browser to decode
+      cardImage.src = src;
+      cardImage.onload = () => {
+        cardImage.classList.add('loaded');
+        cardImgShimmer && cardImgShimmer.classList.add('hidden');
+      };
+    }
+  });
+}
+
+function fillCardData(p) {
+  const s = getLangStrings();
+  const enData = PROVINCE_DETAILS_EN[p.name];
+  const isEn = currentLang === 'en' && enData;
+
+  const lm = LANDMARKS[p.name];
+
+  cardType.textContent = p.type === 'Tỉnh' ? s.typeProvince : s.typeCity;
+  cardName.textContent = isEn ? (PROVINCE_NAME_EN[p.name] || p.name) : p.name;
+
+  if (lm && lm.title) {
+    cardLandmark.textContent = isEn ? (LANDMARK_NAME_EN[lm.title] || lm.title) : lm.title;
+    cardLandmarkSec.style.display = 'inline-flex';
+  } else {
+    cardLandmark.textContent = '';
+    cardLandmarkSec.style.display = 'none';
+  }
+
+  const desc = isEn ? enData.detailDesc : (p.detailDesc || '');
+  cardDesc.textContent = desc;
+
+  const experiences = isEn ? enData.experiences : p.experiences;
+  if (experiences && experiences.length) {
+    cardExperiences.innerHTML = '';
+    experiences.forEach(exp => {
+      const li = document.createElement('li');
+      li.textContent = exp;
+      cardExperiences.appendChild(li);
+    });
+    document.getElementById('card-experiences-sec').style.display = '';
+  } else {
+    document.getElementById('card-experiences-sec').style.display = 'none';
+  }
+
+  const foods = isEn ? enData.foods : p.foods;
+  if (foods && foods.length) {
+    cardFoods.innerHTML = '';
+    foods.forEach(food => {
+      const span = document.createElement('span');
+      span.textContent = food;
+      cardFoods.appendChild(span);
+    });
+    document.getElementById('card-foods-sec').style.display = '';
+  } else {
+    document.getElementById('card-foods-sec').style.display = 'none';
+  }
+
+  if (p.merged && p.merged !== p.name) {
+    if (isEn) {
+      const mergedParts = p.merged.split(',').map(part => part.trim());
+      const mergedEn = mergedParts.map(part => PROVINCE_NAME_EN[part] || part).join(', ');
+      cardMerged.textContent = `${s.mergedPrefix}${mergedEn}`;
+    } else {
+      cardMerged.textContent = `${s.mergedPrefix}${p.merged}`;
+    }
+  } else {
+    cardMerged.textContent = '';
+  }
+
+  const formattedPop = isEn 
+    ? `${(p.pop / 1e6).toFixed(2)} ${s.million}`
+    : `${(p.pop / 1e6).toFixed(2).replace('.', ',')} ${s.million}`;
+    
+  const formattedArea = isEn
+    ? `${p.area.toLocaleString('en-US')} km²`
+    : `${p.area.toLocaleString('vi-VN')} km²`;
+
+  cardStats.textContent = `${formattedPop} · ${formattedArea}`;
+}
 
 function showCard(p) {
-  const lm = LANDMARKS[p.name];
-  cardType.textContent = p.type === 'Tỉnh' ? 'Tỉnh' : 'Thành phố trực thuộc TƯ';
-  cardName.textContent = p.name;
-  cardLandmark.textContent = lm ? lm.title : '';
-  cardDesc.textContent = lm ? lm.desc : '';
-  cardMerged.textContent =
-    p.merged && p.merged !== p.name ? `Hợp nhất từ: ${p.merged}` : 'Giữ nguyên, không sáp nhập';
-  cardStats.textContent = `${(p.pop / 1e6).toFixed(2).replace('.', ',')} triệu dân · ${p.area.toLocaleString('vi-VN')} km²`;
+  const isNewProvince = _currentCardProvince !== p.name;
+  _currentCardProvince = p.name;
+
+  if (isNewProvince) {
+    // Load image in parallel (no fade block on image)
+    showCardImage(p.name);
+  }
+
+  fadeCardContent(() => fillCardData(p));
   card.classList.add('show');
+}
+
+// Re-render card in new language without re-fetching image
+function refreshCardLanguage() {
+  applyLanguageToUI();
+  if (_currentCardProvince !== null) {
+    const p = PROVINCE_SHAPES.find(s => s.name === _currentCardProvince);
+    if (p) fadeCardContent(() => fillCardData(p));
+  } else if (journey && journey.trip) {
+    fadeCardContent(() => showIslandCard(journey.trip));
+  }
 }
 
 // ── Hover & chọn tỉnh ────────────────────────────────────────
@@ -502,10 +992,31 @@ function glideCamera(dt, focus, offset) {
 
 // Thẻ thông tin riêng cho quần đảo
 function showIslandCard(trip) {
-  cardType.textContent = 'Quần đảo · Biển Đông';
-  cardName.textContent = trip.label;
-  cardLandmark.textContent = trip.owner;
-  cardDesc.textContent = 'Phần lãnh thổ thiêng liêng của Tổ quốc giữa Biển Đông';
+  _currentCardProvince = null; // Reset so image is not shown for islands
+  const s = getLangStrings();
+  if (cardImgContainer) cardImgContainer.classList.remove('visible');
+  
+  cardType.textContent = s.islandType;
+  
+  const isEn = currentLang === 'en';
+  cardName.textContent = isEn 
+    ? (trip.label === 'Hoàng Sa' ? 'Hoang Sa' : 'Truong Sa')
+    : trip.label;
+  
+  if (cardLandmark && cardLandmarkSec) {
+    cardLandmark.textContent = isEn 
+      ? (trip.label === 'Hoàng Sa' ? 'Under Da Nang City' : 'Under Khanh Hoa Province')
+      : trip.owner;
+    cardLandmarkSec.style.display = 'inline-flex';
+  }
+  
+  cardDesc.textContent = s.islandDesc;
+  
+  const expSec = document.getElementById('card-experiences-sec');
+  const foodSec = document.getElementById('card-foods-sec');
+  if (expSec) expSec.style.display = 'none';
+  if (foodSec) foodSec.style.display = 'none';
+  
   cardMerged.textContent = '';
   cardStats.textContent = '';
   card.classList.add('show');
@@ -837,7 +1348,21 @@ if (trainMode) {
 }
 
 document.getElementById('loader').classList.add('done');
-window.__dbg = () => ({ introT, hovered, selected, demoActive: !!demo, frame: renderer.info.render.frame });
+
+// ── Language toggle wiring ────────────────────────────────────
+const langToggleBtn = document.getElementById('lang-toggle');
+if (langToggleBtn) {
+  langToggleBtn.addEventListener('click', () => {
+    currentLang = currentLang === 'vi' ? 'en' : 'vi';
+    localStorage.setItem('invietnam-lang', currentLang);
+    refreshCardLanguage();
+  });
+}
+
+// Apply language strings to static UI elements on load
+applyLanguageToUI();
+
+window.__dbg = () => ({ introT, hovered, selected, demoActive: !!demo, frame: renderer.info.render.frame, lang: currentLang });
 window.__shipCheck = () => {
   if (!journey || !journey.trip) return null;
   const ship = journey.trip.ship;

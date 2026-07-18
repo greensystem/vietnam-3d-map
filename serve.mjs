@@ -13,6 +13,8 @@ const MIME = {
   '.png': 'image/png',
   '.webp': 'image/webp',
   '.mp3': 'audio/mpeg',
+  '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg',
 };
 
 createServer(async (req, res) => {

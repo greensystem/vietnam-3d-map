@@ -3,12 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Việt Nam 3D — Chạm vào một dải non sông</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230A1420'/%3E%3Cpath fill='%23FFCD00' d='M32 12l4.7 14.4h15.1l-12.2 8.9 4.6 14.4L32 40.8l-12.2 8.9 4.6-14.4-12.2-8.9h15.1z'/%3E%3C/svg%3E" />
+  <title>inVietnam - Viet Nam Travel Guide App | Viet Nam in your pocket</title>
+  <meta name="description" content="Khám phá 34 tỉnh thành Việt Nam qua bản đồ 3D tương tác đẹp mắt. Click vào mỗi tỉnh để xem đặc trưng, trải nghiệm và đặc sản địa phương. Vietnam interactive 3D map." />
+  <meta name="keywords" content="bản đồ Việt Nam, Vietnam map, du lịch Việt Nam, Vietnam travel, 3D map, interactive map" />
+  <link rel="canonical" href="https://invietnam.vn/" />
+  <!-- Open Graph -->
+  <meta property="og:title" content="inVietnam - Viet Nam Travel Guide App | Viet Nam in your pocket" />
+  <meta property="og:description" content="Khám phá 34 tỉnh thành Việt Nam qua bản đồ 3D tương tác. Click vào mỗi tỉnh để xem đặc trưng địa phương." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://invietnam.vn/" />
+  <meta property="og:image" content="https://invietnam.vn/invietnam.png" />
+  <meta property="og:locale" content="vi_VN" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="inVietnam - Viet Nam Travel Guide App | Viet Nam in your pocket" />
+  <meta name="twitter:description" content="Khám phá 34 tỉnh thành Việt Nam qua bản đồ 3D tương tác đẹp mắt." />
+  <meta name="twitter:image" content="https://invietnam.vn/invietnam.png" />
+  <link rel="icon" href="invietnam.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,600;0,800;1,400&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,400;0,600;0,800;1,400&family=Inter:wght@400;600&display=swap"
     rel="stylesheet"
   />
   <link rel="stylesheet" href="style.css" />
@@ -20,34 +35,58 @@
   <div id="app"></div>
 
   <header class="masthead">
-    <p class="eyebrow">Bản đồ 34 tỉnh, thành · 2025</p>
-    <h1>VIỆT&nbsp;NAM</h1>
-    <p class="sub">Chạm vào một dải non sông</p>
+    <p class="eyebrow" id="hdr-eyebrow">Bản đồ 34 tỉnh, thành Việt Nam · 2026</p>
+    <h1>INVIETNAM</h1>
+    <p class="sub" id="hdr-sub">Chạm vào một dải non sông</p>
   </header>
 
+  <!-- Language Toggle Button -->
+  <button id="lang-toggle" class="lang-btn" type="button" aria-label="Switch language">
+    <span class="lang-flag">🇬🇧</span>
+    <span class="lang-label">EN</span>
+  </button>
+
   <aside class="card" id="card" aria-live="polite">
-    <p class="card-type" id="card-type"></p>
-    <h2 class="card-name" id="card-name"></h2>
-    <div class="card-landmark">
-      <span class="card-landmark-icon">◆</span>
-      <div>
-        <p class="card-landmark-title" id="card-landmark"></p>
-        <p class="card-landmark-desc" id="card-desc"></p>
-      </div>
+    <div class="card-img-container" id="card-img-container">
+      <img class="card-image" id="card-image" src="" alt="" loading="lazy" />
+      <div class="card-img-shimmer" id="card-img-shimmer"></div>
     </div>
-    <div class="card-facts">
-      <span id="card-merged"></span>
-      <span id="card-stats"></span>
+    <div class="card-content">
+      <p class="card-type" id="card-type"></p>
+      <h2 class="card-name" id="card-name"></h2>
+      
+      <p class="card-landmark" id="card-landmark-sec">
+        <span class="card-landmark-icon">◆</span>
+        <span id="card-landmark"></span>
+      </p>
+
+      <p class="card-desc" id="card-desc"></p>
+      
+      <div class="card-section" id="card-experiences-sec">
+        <h4 class="card-section-title" id="lbl-experiences">Trải nghiệm nên thử</h4>
+        <ul class="card-experiences-list" id="card-experiences"></ul>
+      </div>
+      
+      <div class="card-section" id="card-foods-sec">
+        <h4 class="card-section-title" id="lbl-foods">Món ngon đặc sản</h4>
+        <div class="card-foods-tags" id="card-foods"></div>
+      </div>
+
+      <div class="card-facts">
+        <span id="card-merged"></span>
+        <span id="card-stats"></span>
+      </div>
     </div>
   </aside>
 
-  <button id="train-btn" class="train-btn" type="button">🚂 Chuyến tàu Thống Nhất</button>
+  <button id="train-btn" class="train-btn" type="button">🚂 <span id="lbl-train">Chuyến tàu Thống Nhất</span></button>
 
   <p class="hint" id="hint">Rê chuột qua từng tỉnh · kéo để xoay, lăn để thu phóng · nhấp để bay tới gần</p>
 
-  <a class="brand" href="https://holetex.com" target="_blank" rel="noopener">holetex<span>.com</span></a>
+  <div class="loader" id="loader"><span id="lbl-loader">Đang dựng non sông…</span></div>
 
-  <div class="loader" id="loader"><span>Đang dựng non sông…</span></div>
+  <!-- Brand -->
+  <a class="brand" href="https://invietnam.vn" target="_blank" rel="noopener">in<span>Vietnam</span></a>
 
   <script type="module" src="main.js"></script>
 </body>
