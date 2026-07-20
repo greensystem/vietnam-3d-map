@@ -40,10 +40,29 @@
     <p class="sub" id="hdr-sub">Chạm vào một dải non sông</p>
   </header>
 
+  <!-- Search & Filter Bar -->
+  <div id="search-container" class="search-box">
+    <div class="search-input-wrapper">
+      <input type="text" id="province-search" placeholder="Tìm kiếm tỉnh thành..." autocomplete="off" />
+      <button id="search-clear" class="search-clear-btn" type="button" aria-label="Clear search" style="display: none;">×</button>
+      <div id="search-suggestions" class="suggestions-list" style="display: none;"></div>
+    </div>
+    <div class="search-select-wrapper">
+      <select id="province-select">
+        <option value="" id="lbl-select-default">-- Chọn tỉnh thành --</option>
+      </select>
+    </div>
+  </div>
+
   <!-- Language Toggle Button -->
   <button id="lang-toggle" class="lang-btn" type="button" aria-label="Switch language">
     <span class="lang-flag">🇬🇧</span>
     <span class="lang-label">EN</span>
+  </button>
+
+  <!-- Day/Night Toggle Button -->
+  <button id="theme-toggle" class="theme-btn" type="button" aria-label="Switch theme">
+    <span class="theme-icon">🌙</span>
   </button>
 
   <aside class="card" id="card" aria-live="polite">

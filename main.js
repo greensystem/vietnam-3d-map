@@ -164,17 +164,17 @@ function getLangStrings() { return UI_STRINGS[currentLang]; }
 function applyLanguageToUI() {
   const s = getLangStrings();
   const el = (id) => document.getElementById(id);
-  if (el('hdr-eyebrow'))   el('hdr-eyebrow').textContent   = s.eyebrow;
-  if (el('hdr-sub'))       el('hdr-sub').textContent       = s.sub;
-  if (el('hint'))          el('hint').textContent          = s.hint;
-  if (el('lbl-loader'))    el('lbl-loader').textContent    = s.loader;
-  if (el('lbl-train'))     el('lbl-train').textContent     = s.train;
+  if (el('hdr-eyebrow')) el('hdr-eyebrow').textContent = s.eyebrow;
+  if (el('hdr-sub')) el('hdr-sub').textContent = s.sub;
+  if (el('hint')) el('hint').textContent = s.hint;
+  if (el('lbl-loader')) el('lbl-loader').textContent = s.loader;
+  if (el('lbl-train')) el('lbl-train').textContent = s.train;
   if (el('lbl-experiences')) el('lbl-experiences').textContent = s.experiences;
-  if (el('lbl-foods'))     el('lbl-foods').textContent     = s.foods;
+  if (el('lbl-foods')) el('lbl-foods').textContent = s.foods;
   // Update lang button to show what clicking will switch TO
   const btn = el('lang-toggle');
   if (btn) {
-    btn.querySelector('.lang-flag').textContent  = s.langFlag;
+    btn.querySelector('.lang-flag').textContent = s.langFlag;
     btn.querySelector('.lang-label').textContent = s.langLabel;
     btn.classList.toggle('active-en', currentLang === 'en');
   }
@@ -189,40 +189,40 @@ function applyLanguageToUI() {
 
 // Province-specific gradient palettes (hue pairs)
 const PROVINCE_PALETTES = {
-  'Hà Nội':         [[220, 60], [180, 45]],
-  'Hải Phòng':      [[190, 65], [220, 50]],
-  'Huế':            [[270, 55], [200, 45]],
-  'Đà Nẵng':        [[200, 60], [160, 55]],
-  'TP. Hồ Chí Minh': [[30,  70], [55,  60]],
-  'Cần Thơ':        [[160, 65], [120, 55]],
-  'Tuyên Quang':    [[130, 60], [170, 55]],
-  'Cao Bằng':       [[210, 65], [175, 55]],
-  'Lai Châu':       [[145, 65], [185, 55]],
-  'Lào Cai':        [[140, 70], [100, 60]],
-  'Thái Nguyên':    [[120, 65], [155, 55]],
-  'Điện Biên':      [[40,  70], [20,  60]],
-  'Lạng Sơn':      [[195, 60], [230, 50]],
-  'Sơn La':         [[115, 65], [150, 55]],
-  'Phú Thọ':       [[25,  65], [50,  55]],
-  'Bắc Ninh':       [[280, 55], [240, 50]],
-  'Quảng Ninh':     [[200, 70], [230, 55]],
-  'Hưng Yên':      [[50,  65], [80,  55]],
-  'Ninh Bình':      [[165, 60], [200, 50]],
-  'Thanh Hóa':      [[35,  65], [60,  55]],
-  'Nghệ An':        [[220, 65], [190, 50]],
-  'Hà Tĩnh':        [[30,  60], [55,  50]],
-  'Quảng Trị':     [[200, 65], [230, 55]],
-  'Quảng Ngãi':     [[185, 60], [215, 50]],
-  'Gia Lai':         [[105, 65], [140, 55]],
-  'Khánh Hòa':      [[195, 70], [220, 60]],
-  'Đắk Lắk':        [[30,  65], [55,  55]],
-  'Lâm Đồng':      [[155, 65], [190, 55]],
-  'Đồng Nai':       [[125, 65], [165, 55]],
-  'Tây Ninh':       [[265, 60], [230, 50]],
-  'Vĩnh Long':      [[170, 65], [135, 55]],
-  'Đồng Tháp':     [[150, 70], [115, 60]],
-  'An Giang':        [[135, 65], [100, 55]],
-  'Cà Mau':         [[170, 70], [200, 60]],
+  'Hà Nội': [[220, 60], [180, 45]],
+  'Hải Phòng': [[190, 65], [220, 50]],
+  'Huế': [[270, 55], [200, 45]],
+  'Đà Nẵng': [[200, 60], [160, 55]],
+  'TP. Hồ Chí Minh': [[30, 70], [55, 60]],
+  'Cần Thơ': [[160, 65], [120, 55]],
+  'Tuyên Quang': [[130, 60], [170, 55]],
+  'Cao Bằng': [[210, 65], [175, 55]],
+  'Lai Châu': [[145, 65], [185, 55]],
+  'Lào Cai': [[140, 70], [100, 60]],
+  'Thái Nguyên': [[120, 65], [155, 55]],
+  'Điện Biên': [[40, 70], [20, 60]],
+  'Lạng Sơn': [[195, 60], [230, 50]],
+  'Sơn La': [[115, 65], [150, 55]],
+  'Phú Thọ': [[25, 65], [50, 55]],
+  'Bắc Ninh': [[280, 55], [240, 50]],
+  'Quảng Ninh': [[200, 70], [230, 55]],
+  'Hưng Yên': [[50, 65], [80, 55]],
+  'Ninh Bình': [[165, 60], [200, 50]],
+  'Thanh Hóa': [[35, 65], [60, 55]],
+  'Nghệ An': [[220, 65], [190, 50]],
+  'Hà Tĩnh': [[30, 60], [55, 50]],
+  'Quảng Trị': [[200, 65], [230, 55]],
+  'Quảng Ngãi': [[185, 60], [215, 50]],
+  'Gia Lai': [[105, 65], [140, 55]],
+  'Khánh Hòa': [[195, 70], [220, 60]],
+  'Đắk Lắk': [[30, 65], [55, 55]],
+  'Lâm Đồng': [[155, 65], [190, 55]],
+  'Đồng Nai': [[125, 65], [165, 55]],
+  'Tây Ninh': [[265, 60], [230, 50]],
+  'Vĩnh Long': [[170, 65], [135, 55]],
+  'Đồng Tháp': [[150, 70], [115, 60]],
+  'An Giang': [[135, 65], [100, 55]],
+  'Cà Mau': [[170, 70], [200, 60]],
 };
 
 function makeProvinceCanvas(name) {
@@ -237,9 +237,9 @@ function makeProvinceCanvas(name) {
 
   // Background gradient
   const bg = g.createLinearGradient(0, 0, W, H);
-  bg.addColorStop(0,   `hsl(${h1}, ${s1}%, 16%)`);
+  bg.addColorStop(0, `hsl(${h1}, ${s1}%, 16%)`);
   bg.addColorStop(0.5, `hsl(${(h1 + h2) / 2}, ${(s1 + s2) / 2}%, 12%)`);
-  bg.addColorStop(1,   `hsl(${h2}, ${s2}%, 14%)`);
+  bg.addColorStop(1, `hsl(${h2}, ${s2}%, 14%)`);
   g.fillStyle = bg;
   g.fillRect(0, 0, W, H);
 
@@ -323,7 +323,7 @@ function loadProvinceImage(name) {
   return new Promise((resolve) => {
     const slug = toSlug(name);
     let extIndex = 0;
-    
+
     // Safety timeout: if checking all extensions takes >1.2 seconds, fallback to canvas
     const timer = setTimeout(() => {
       resolve(getProvinceCanvasURL(name));
@@ -377,8 +377,8 @@ renderer.toneMappingExposure = 1.3;
 app.appendChild(renderer.domElement);
 
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('#0a1420');
-scene.fog = new THREE.FogExp2('#0a1420', 0.0015);
+scene.background = new THREE.Color('#08101a');
+scene.fog = new THREE.FogExp2('#08101a', 0.0016);
 
 const camera = new THREE.PerspectiveCamera(42, innerWidth / innerHeight, 1, 900);
 
@@ -396,30 +396,31 @@ const HOME_TARGET = new THREE.Vector3(4, 0, 8);
 camera.position.copy(reducedMotion ? HOME_POS : new THREE.Vector3(0, 300, 30));
 
 // ── Ánh sáng ─────────────────────────────────────────────────
-scene.add(new THREE.HemisphereLight('#9fc8e8', '#1c3044', 1.0));
+const hemiLight = new THREE.HemisphereLight('#9fc8e8', '#1c3044', 0.95);
+scene.add(hemiLight);
 
-const key = new THREE.DirectionalLight('#ffd9a0', 2.4);
-key.position.set(90, 130, 60);
-key.castShadow = true;
-key.shadow.mapSize.set(2048, 2048);
-key.shadow.camera.left = -110;
-key.shadow.camera.right = 110;
-key.shadow.camera.top = 110;
-key.shadow.camera.bottom = -110;
-key.shadow.camera.far = 420;
-key.shadow.bias = -0.0004;
-scene.add(key);
+const keyLight = new THREE.DirectionalLight('#ffd9a0', 2.3);
+keyLight.position.set(90, 130, 60);
+keyLight.castShadow = true;
+keyLight.shadow.mapSize.set(2048, 2048);
+keyLight.shadow.camera.left = -110;
+keyLight.shadow.camera.right = 110;
+keyLight.shadow.camera.top = 110;
+keyLight.shadow.camera.bottom = -110;
+keyLight.shadow.camera.far = 420;
+keyLight.shadow.bias = -0.0004;
+scene.add(keyLight);
 
-const rim = new THREE.DirectionalLight('#4fb3ff', 0.7);
-rim.position.set(-80, 60, -90);
-scene.add(rim);
+const rimLight = new THREE.DirectionalLight('#4fb3ff', 0.65);
+rimLight.position.set(-80, 60, -90);
+scene.add(rimLight);
 
 // ── Biển đêm ─────────────────────────────────────────────────
 const seaGeo = new THREE.PlaneGeometry(900, 900, 80, 80);
 const seaMat = new THREE.MeshStandardMaterial({
-  color: '#123048',
-  roughness: 0.6,
-  metalness: 0.2,
+  color: '#1a4364',
+  roughness: 0.38,
+  metalness: 0.35,
 });
 const sea = new THREE.Mesh(seaGeo, seaMat);
 sea.rotation.x = -Math.PI / 2;
@@ -465,13 +466,15 @@ PROVINCE_SHAPES.forEach((p, idx) => {
   const l = 38 + ((idx * 7) % 5) * 1.8;
   const topMat = new THREE.MeshStandardMaterial({
     color: new THREE.Color(`hsl(${h}, ${s}%, ${l}%)`),
-    roughness: 0.9,
+    roughness: 0.6,
+    metalness: 0.15,
     emissive: new THREE.Color('#d8a13a'),
     emissiveIntensity: 0,
   });
   const sideMat = new THREE.MeshStandardMaterial({
     color: new THREE.Color(`hsl(${h}, ${Math.round(s * 0.8)}%, ${Math.round(l * 0.5)}%)`),
-    roughness: 0.95,
+    roughness: 0.85,
+    metalness: 0.05,
   });
 
   const meshes = [];
@@ -528,10 +531,10 @@ function updateSpriteText(sp, text, size = 15) {
   g.shadowBlur = 8;
   g.fillStyle = '#c8d8e2';
   g.fillText(text, w / 2, hgt / 2);
-  
+
   const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace;
-  
+
   if (sp.material.map) {
     sp.material.map.dispose();
   }
@@ -559,7 +562,7 @@ function updateIslandLabels() {
 // ── Hạt sáng lơ lửng ─────────────────────────────────────────
 let dust = null;
 if (!reducedMotion) {
-  const N = 260;
+  const N = 380;
   const pos = new Float32Array(N * 3);
   for (let i = 0; i < N; i++) {
     pos[i * 3] = (Math.random() - 0.5) * 220;
@@ -569,10 +572,200 @@ if (!reducedMotion) {
   const geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   dust = new THREE.Points(geo, new THREE.PointsMaterial({
-    color: '#ffd98a', size: 0.55, transparent: true, opacity: 0.5,
+    color: '#ffd98a', size: 0.75, transparent: true, opacity: 0.55,
     blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true,
   }));
   scene.add(dust);
+}
+
+// ── Quản lý Theme (Day/Night cycle) ──────────────────────────
+let currentTheme = 'dark';
+
+function setTheme(theme) {
+  currentTheme = theme;
+  const isLight = theme === 'light';
+
+  // 1. Cập nhật giao diện HTML/CSS
+  if (isLight) {
+    document.body.classList.add('light-theme');
+    const icon = document.querySelector('#theme-toggle .theme-icon');
+    if (icon) icon.textContent = '☀️';
+  } else {
+    document.body.classList.remove('light-theme');
+    const icon = document.querySelector('#theme-toggle .theme-icon');
+    if (icon) icon.textContent = '🌙';
+  }
+
+  // 2. Cập nhật Three.js
+  const bgColor = isLight ? '#cbdfe5' : '#08101a';
+  renderer.setClearColor(bgColor);
+  scene.background = new THREE.Color(bgColor);
+  scene.fog.color = new THREE.Color(bgColor);
+  scene.fog.density = isLight ? 0.0018 : 0.0016;
+
+  // Cập nhật ánh sáng
+  hemiLight.color.set(isLight ? '#ffffff' : '#9fc8e8');
+  hemiLight.groundColor.set(isLight ? '#aed2e0' : '#1c3044');
+  hemiLight.intensity = isLight ? 1.2 : 0.95;
+
+  keyLight.color.set(isLight ? '#ffffff' : '#ffd9a0');
+  keyLight.intensity = isLight ? 2.4 : 2.3;
+
+  rimLight.color.set(isLight ? '#b0e0ff' : '#4fb3ff');
+  rimLight.intensity = isLight ? 0.75 : 0.65;
+
+  // Cập nhật chất liệu biển
+  seaMat.color.set(isLight ? '#2b7094' : '#1a4364');
+  seaMat.roughness = isLight ? 0.3 : 0.38;
+  seaMat.metalness = isLight ? 0.4 : 0.35;
+
+  // Cập nhật hạt bụi sáng
+  if (dust) {
+    dust.visible = !isLight;
+  }
+}
+
+// ── Tính năng Tìm kiếm & Lọc tỉnh thành ──────────────────────
+function removeVietnameseTones(str) {
+  return str
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+    .toLowerCase()
+    .trim();
+}
+
+function initSearchAndFilter() {
+  const select = document.getElementById('province-select');
+  const searchInput = document.getElementById('province-search');
+  const clearBtn = document.getElementById('search-clear');
+  const suggestions = document.getElementById('search-suggestions');
+
+  if (!select || !searchInput) return;
+
+  const isEn = currentLang === 'en';
+  const provinces = PROVINCE_SHAPES.map((p, originalIdx) => {
+    const name = isEn ? (PROVINCE_NAME_EN[p.name] || p.name) : p.name;
+    return { name, originalIdx };
+  }).sort((a, b) => a.name.localeCompare(b.name, isEn ? 'en' : 'vi'));
+
+  // Điền dữ liệu vào Dropdown select
+  const defaultOption = select.options[0];
+  select.innerHTML = '';
+  select.appendChild(defaultOption);
+
+  defaultOption.textContent = isEn ? '-- Select Province --' : '-- Chọn tỉnh thành --';
+  searchInput.placeholder = isEn ? 'Search province...' : 'Tìm kiếm tỉnh thành...';
+
+  provinces.forEach(p => {
+    const opt = document.createElement('option');
+    opt.value = p.originalIdx;
+    opt.textContent = p.name;
+    select.appendChild(opt);
+  });
+
+  // Đồng bộ lại giá trị nếu đang có tỉnh được chọn
+  if (selected >= 0) {
+    select.value = selected;
+    const pName = isEn ? (PROVINCE_NAME_EN[PROVINCE_SHAPES[selected].name] || PROVINCE_SHAPES[selected].name) : PROVINCE_SHAPES[selected].name;
+    searchInput.value = pName;
+    clearBtn.style.display = 'block';
+  }
+
+  // Sự kiện thay đổi select
+  select.onchange = (e) => {
+    const val = e.target.value;
+    if (val !== '') {
+      const idx = parseInt(val, 10);
+      selectProvince(idx);
+      const pName = isEn ? (PROVINCE_NAME_EN[PROVINCE_SHAPES[idx].name] || PROVINCE_SHAPES[idx].name) : PROVINCE_SHAPES[idx].name;
+      searchInput.value = pName;
+      clearBtn.style.display = 'block';
+    } else {
+      searchInput.value = '';
+      clearBtn.style.display = 'none';
+      suggestions.style.display = 'none';
+      resetSelection();
+    }
+  };
+
+  // Sự kiện search input
+  searchInput.oninput = (e) => {
+    const val = e.target.value;
+    if (val.trim() === '') {
+      clearBtn.style.display = 'none';
+      suggestions.style.display = 'none';
+      select.value = '';
+      resetSelection();
+      return;
+    }
+    clearBtn.style.display = 'block';
+
+    const query = removeVietnameseTones(val);
+    const filtered = provinces.filter(p => {
+      const nameNoTone = removeVietnameseTones(p.name);
+      return nameNoTone.includes(query);
+    });
+
+    if (filtered.length > 0) {
+      suggestions.innerHTML = '';
+      filtered.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'suggestions-item';
+        item.textContent = p.name;
+        item.onclick = () => {
+          selectProvince(p.originalIdx);
+          searchInput.value = p.name;
+          select.value = p.originalIdx;
+          suggestions.style.display = 'none';
+        };
+        suggestions.appendChild(item);
+      });
+      suggestions.style.display = 'block';
+    } else {
+      suggestions.style.display = 'none';
+    }
+  };
+
+  // Nút xóa tìm kiếm
+  clearBtn.onclick = () => {
+    searchInput.value = '';
+    select.value = '';
+    clearBtn.style.display = 'none';
+    suggestions.style.display = 'none';
+    resetSelection();
+  };
+
+  // Ẩn suggestions khi click ra ngoài
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#search-container')) {
+      suggestions.style.display = 'none';
+    }
+  });
+
+  // Enter chọn kết quả đầu tiên
+  searchInput.onkeydown = (e) => {
+    if (e.key === 'Enter') {
+      const firstItem = suggestions.querySelector('.suggestions-item');
+      if (firstItem) {
+        firstItem.click();
+      }
+    }
+  };
+}
+
+function selectProvince(idx) {
+  if (demo || journey) return;
+  setState(coarsePointer ? -1 : idx, idx);
+  const c = provinceGroups[idx].centroid;
+  flyTo(c.clone().add(CAM_OFFSET), new THREE.Vector3(c.x, 2, c.z));
+}
+
+function resetSelection() {
+  if (demo || journey) return;
+  setState(coarsePointer ? -1 : hovered, -1);
+  flyTo(HOME_POS.clone(), HOME_TARGET.clone());
 }
 
 // ── Thẻ thông tin — bilingual, images, fade animation ────────
@@ -690,10 +883,10 @@ function fillCardData(p) {
     cardMerged.textContent = '';
   }
 
-  const formattedPop = isEn 
+  const formattedPop = isEn
     ? `${(p.pop / 1e6).toFixed(2)} ${s.million}`
     : `${(p.pop / 1e6).toFixed(2).replace('.', ',')} ${s.million}`;
-    
+
   const formattedArea = isEn
     ? `${p.area.toLocaleString('en-US')} km²`
     : `${p.area.toLocaleString('vi-VN')} km²`;
@@ -717,6 +910,7 @@ function showCard(p) {
 // Re-render card in new language without re-fetching image
 function refreshCardLanguage() {
   applyLanguageToUI();
+  initSearchAndFilter(); // Cập nhật lại ngôn ngữ bộ lọc tìm kiếm
   if (_currentCardProvince !== null) {
     const p = PROVINCE_SHAPES.find(s => s.name === _currentCardProvince);
     if (p) fadeCardContent(() => fillCardData(p));
@@ -995,28 +1189,28 @@ function showIslandCard(trip) {
   _currentCardProvince = null; // Reset so image is not shown for islands
   const s = getLangStrings();
   if (cardImgContainer) cardImgContainer.classList.remove('visible');
-  
+
   cardType.textContent = s.islandType;
-  
+
   const isEn = currentLang === 'en';
-  cardName.textContent = isEn 
+  cardName.textContent = isEn
     ? (trip.label === 'Hoàng Sa' ? 'Hoang Sa' : 'Truong Sa')
     : trip.label;
-  
+
   if (cardLandmark && cardLandmarkSec) {
-    cardLandmark.textContent = isEn 
+    cardLandmark.textContent = isEn
       ? (trip.label === 'Hoàng Sa' ? 'Under Da Nang City' : 'Under Khanh Hoa Province')
       : trip.owner;
     cardLandmarkSec.style.display = 'inline-flex';
   }
-  
+
   cardDesc.textContent = s.islandDesc;
-  
+
   const expSec = document.getElementById('card-experiences-sec');
   const foodSec = document.getElementById('card-foods-sec');
   if (expSec) expSec.style.display = 'none';
   if (foodSec) foodSec.style.display = 'none';
-  
+
   cardMerged.textContent = '';
   cardStats.textContent = '';
   card.classList.add('show');
@@ -1169,16 +1363,16 @@ function journeyStep(dt, t) {
 // MỘT góc nhìn cố định cho mọi điểm dừng (đồng bộ với chuyến tàu) — không xoay
 const DEMO_OFF = [11.5, 18, 20.5];
 const DEMO_STOPS = [
-  { name: 'Hà Nội',          off: DEMO_OFF, dwell: 2.6 },
-  { name: 'Quảng Ninh',      off: DEMO_OFF, dwell: 2.6 },
-  { name: 'Đà Nẵng',         off: DEMO_OFF, dwell: 2.8 },
-  { name: 'Huế',             off: DEMO_OFF, dwell: 2.4 },
+  { name: 'Hà Nội', off: DEMO_OFF, dwell: 2.6 },
+  { name: 'Quảng Ninh', off: DEMO_OFF, dwell: 2.6 },
+  { name: 'Đà Nẵng', off: DEMO_OFF, dwell: 2.8 },
+  { name: 'Huế', off: DEMO_OFF, dwell: 2.4 },
   // Biển Đông: hai quần đảo thiêng liêng của Tổ quốc
-  { sea: true, pos: [61, 19, 19],  tgt: [50, 1, -2],  dwell: 2.6 },
-  { sea: true, pos: [83, 19, 76],  tgt: [72, 1, 55],  dwell: 2.6 },
+  { sea: true, pos: [61, 19, 19], tgt: [50, 1, -2], dwell: 2.6 },
+  { sea: true, pos: [83, 19, 76], tgt: [72, 1, 55], dwell: 2.6 },
   { name: 'TP. Hồ Chí Minh', off: DEMO_OFF, dwell: 2.6 },
-  { name: 'Đồng Tháp',       off: DEMO_OFF, dwell: 2.4 },
-  { name: 'Cà Mau',          off: DEMO_OFF, dwell: 2.6 },
+  { name: 'Đồng Tháp', off: DEMO_OFF, dwell: 2.4 },
+  { name: 'Cà Mau', off: DEMO_OFF, dwell: 2.6 },
 ];
 let demo = null;
 if (demoMode) {
@@ -1361,6 +1555,17 @@ if (langToggleBtn) {
 
 // Apply language strings to static UI elements on load
 applyLanguageToUI();
+
+// ── Theme toggle wiring ───────────────────────────────────────
+const themeToggleBtn = document.getElementById('theme-toggle');
+if (themeToggleBtn) {
+  themeToggleBtn.addEventListener('click', () => {
+    setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+  });
+}
+
+// Khởi tạo bộ tìm kiếm và lọc tỉnh thành
+initSearchAndFilter();
 
 window.__dbg = () => ({ introT, hovered, selected, demoActive: !!demo, frame: renderer.info.render.frame, lang: currentLang });
 window.__shipCheck = () => {
