@@ -1,0 +1,44 @@
+# Workflow tự động deploy lên GitHub Pages dành cho dự án web tĩnh
+name: Deploy static content to Pages
+
+on:
+  # Kích hoạt workflow khi có push lên nhánh develop
+  push:
+    branches: ["develop"]
+
+  # Cho phép chạy workflow thủ công từ tab Actions trên GitHub
+  workflow_dispatch:
+
+# Cấp quyền cho GITHUB_TOKEN để triển khai lên GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Tránh việc chạy song song nhiều tiến trình deploy cùng lúc
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout mã nguồn
+        uses: actions/checkout@v4
+
+      - name: Cấu hình GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Đóng gói và tải lên tài nguyên tĩnh (Artifact)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Đóng gói toàn bộ thư mục gốc
+          path: '.'
+
+      - name: Triển khai lên GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

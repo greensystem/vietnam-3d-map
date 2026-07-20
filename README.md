@@ -53,6 +53,14 @@ Kích hoạt qua tham số URL `?demo=1` giúp camera chạy tự động tour t
 
 ---
 
+## 🌐 Triển khai lên GitHub Pages
+
+Ứng dụng này đã được cấu hình và tối ưu hóa để có thể chạy trực tuyến miễn phí thông qua **GitHub Pages**.
+
+Xem chi tiết hướng dẫn từng bước cấu hình tại đây: [Tài liệu hướng dẫn triển khai GitHub Pages (DEPLOYMENT.md)](DEPLOYMENT.md).
+
+---
+
 ## 🎮 Hướng dẫn điều khiển
 
 | Thao tác | Hiệu ứng trên giao diện |
